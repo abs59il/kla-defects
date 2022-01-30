@@ -1,0 +1,81 @@
+<div class="flex h-screen space-x-4 overflow-hidden">
+
+    <!-- List Navigation -->
+
+    <nav class="m-4 flex flex-col flex-1 max-w-sm border">
+        <div class="z-10  top-0 border-b border-gray-200 bg-gray-50 px-6 py-1 text-sm font-medium text-gray-500">
+        <h3>{{ 'defects list' | uppercase }}</h3>
+        </div>
+      <ul role="list" class="flex flex-col divide-y divide-gray-200 overflow-auto">
+        <li *ngFor="let defect of defects | async" [routerLink]="['/', defect.uuid]" routerLinkActive="bg-gray-100"
+            class="hover:bg-gray-50 focus:bg-gray-100">
+      <div class="flex items-stretch">
+        <div class="w-4 h-auto bg-red-900" [style.opacity]="defect.severity / 100"> &nbsp; </div>
+    
+              <div class="p-4">
+                <p class="text-sm font-medium text-gray-900">({{defect.x}} , {{defect.y}})</p>
+                <p class="text-sm text-gray-500">{{ defect.uuid }}</p>
+              </div>
+          </div>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="p-4 flex flex-col flex-1 overflow-auto">
+
+        <!-- Grid Navigation -->
+        <nav class="flex justify-start">
+            <div class="flex flex-col border">
+                <div class="border-b border-gray-200 bg-gray-50 px-6 py-1 text-sm font-medium text-gray-500">
+                    <h3>{{ 'defects map' | uppercase }}</h3>
+                </div>
+                <ul app-defect-map [width]="800" [height]="600" class="relative overflow-auto">
+                    <li app-defect-map-item [defect]="defect"
+                        class="absolute block bg-red-900 h-2 w-2 rounded-full ring-blue-500 ring-offset-4"
+                        [routerLink]="['/', defect.uuid]"
+                        routerLinkActive="ring-2"
+                        *ngFor="let defect of defects | async"></li>
+                  </ul>
+            </div>
+        </nav>
+
+        <!-- Details -->
+
+          <section *ngIf="selectedDefect" class="border mt-8">
+            <div class="z-10  top-0 border-b border-gray-200 bg-gray-50 px-6 py-1 text-sm font-medium text-gray-500">
+                <h3>{{ 'details' | uppercase }} <span >[{{ selectedDefect?.uuid }}] </span>   </h3>
+            </div>
+              <div class="flex">
+                <div class=" px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">
+                      X
+                    </dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      {{ selectedDefect.x }}
+                    </dd>
+                  </div>
+                  <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">
+                      Y
+                    </dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                     {{ selectedDefect.y }}
+                    </dd>
+                  </div>
+                  <div class=" px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">
+                      Severity
+                    </dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      {{ selectedDefect.severity }}
+                    </dd>
+                  </div>
+                <input [formControl]="severity" type="range" id="volume" name="volume" min="10" max="100">
+              </div>
+          </section>
+
+    </div>
+  
+
+  
+  </div>
