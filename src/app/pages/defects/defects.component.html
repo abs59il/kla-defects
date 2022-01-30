@@ -70,7 +70,7 @@
                       {{ selectedDefect.severity }}
                     </dd>
                   </div>
-                <input [formControl]="severity" type="range" id="volume" name="volume" min="10" max="100">
+                <input (change)="onChange($event)" [formControl]="severity" type="range" id="volume" name="volume" min="10" max="100">
               </div>
           </section>
 

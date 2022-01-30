@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Defect } from 'src/app/models/defect';
 import { StateService } from 'src/app/state/state.service';
 import { FormControl } from '@angular/forms';
-import { debounceTime, switchMap } from 'rxjs/operators';
+import { debounceTime, switchMap, tap } from 'rxjs/operators';
+import { from, fromEvent } from 'rxjs';
 
 @Component({
   selector: 'app-defects',
   templateUrl: './defects.component.html',
   styleUrls: ['./defects.component.scss']
 })
-export class DefectsComponent implements OnInit {
+export class DefectsComponent implements OnInit, AfterViewInit {
 
   severity = new FormControl();
 
@@ -18,17 +19,9 @@ export class DefectsComponent implements OnInit {
 
   selectedDefect?: Defect;
 
-  constructor(private route: ActivatedRoute, private state: StateService) {
+  constructor(private route: ActivatedRoute, private state: StateService) { }
 
-    this.severity.valueChanges.pipe(
-      debounceTime(200),
-    ).subscribe(response => {
-      if (this.selectedDefect) {
-        this.state.updateDefect(this.selectedDefect.uuid, response)
-      }
-    })
-
-   }
+  ngAfterViewInit(): void {  }
 
   ngOnInit(): void { 
 
@@ -40,6 +33,14 @@ export class DefectsComponent implements OnInit {
         this.severity.patchValue(defect?.severity);
         
     });
+
+  }
+
+  onChange(event: any) {
+
+    if (this.selectedDefect) {
+      this.state.updateDefect(this.selectedDefect.uuid, event.target.value)
+    }
 
   }
 
